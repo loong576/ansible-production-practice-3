@@ -1,0 +1,8 @@
+---
+# defaults file for find
+directory_path: /opt
+exclude_directory: find3
+file_path: /opt
+file_contains: .*error.*
+exclude_file: test2.txt
+file_size: -100m

@@ -1,0 +1,5 @@
+---
+- hosts: "{{ hostlist }}"
+  gather_facts: no
+  roles:
+  - role: find 

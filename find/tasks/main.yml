@@ -1,0 +1,45 @@
+---
+# tasks file for find
+# author: loong576
+
+- name: choose the directory 
+  find:
+    paths: "{{ directory_path }}" 
+    recurse: no
+    file_type: directory
+    excludes: "{{ exclude_directory }}" 
+  register: find_directory
+
+- name: find in directory 
+  find:
+    paths: "{{item.path}}" 
+    recurse: yes 
+    contains: "{{ file_contains }}" 
+    hidden: yes
+    size: "{{ file_size }}" 
+  with_list: "{{find_directory.files}}"
+  register: find_contains_in_directory
+
+
+- name: echo find file in directories
+  debug:
+    msg:
+      "{% for i in item.files %}
+          {{ i.path }} 
+       {% endfor %}"
+  with_list: "{{find_contains_in_directory.results}}"
+  when: item.matched != 0
+
+- name: find in files
+  find:
+    path: "{{ file_path }}" 
+    file_type: file
+    excludes: "{{ exclude_file }}" 
+    hidden: yes
+    contains: "{{ file_contains }}" 
+  register: find_only_file
+
+- name: echo find file in files
+  debug:
+    msg: "{{item.path}}"
+  with_list: "{{find_only_file.files}}"
